@@ -1,6 +1,7 @@
 package service
 
 import (
+	"github.com/google/uuid"
 	"noty-notifications/internal/dto"
 	"noty-notifications/internal/repository"
 )
@@ -31,4 +32,18 @@ func (s NotificationService) UpdateNotification(notificationDTO dto.Notification
 	}
 
 	return true, nil
+}
+
+func (s NotificationService) FindByID(id string) (dto.NotificationInfo, error) {
+	var notification dto.NotificationInfo
+	notificationUUID, err := uuid.Parse(id)
+	if err != nil {
+		return notification, err
+	}
+
+	if err := s.notificationRepo.FindByID(&notification, notificationUUID.String()); err != nil {
+		return notification, err
+	}
+
+	return notification, nil
 }
