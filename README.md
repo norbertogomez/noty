@@ -17,8 +17,6 @@ _Dependencies (minimum tested versions)_
 
 ### Set up 🔧
 
-_Spin up the scrapper container_
-
 To add make commands
 
 ## Built with 🛠️
