@@ -1,5 +1,5 @@
 CREATE KEYSPACE "noty"
-WITH replication = {'class': 'SimpleStrategy', 'replication_factor' : 3};
+WITH replication = {'class': 'SimpleStrategy', 'replication_factor' : 1};
 
 USE noty;
 CREATE TABLE notifications(

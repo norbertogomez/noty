@@ -35,7 +35,8 @@ func registerRoutes(server *gin.Engine, svcs services) {
 		})
 	})
 
-	noAuth.POST("/notifications", controller.CreateNotification(svcs.notificationSvc))
+	noAuth.POST("/notification", controller.CreateNotification(svcs.notificationSvc))
+	noAuth.PUT("/notification/:id", controller.UpdateNotification(svcs.notificationSvc))
 }
 
 func buildServices() services {

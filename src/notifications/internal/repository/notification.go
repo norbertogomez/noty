@@ -8,10 +8,15 @@ import (
 
 type NotificationRepository interface {
 	NotificationCreator
+	NotificationUpdater
 }
 
 type NotificationCreator interface {
-	CreateNotification(notification model.Notification) error
+	Create(notification model.Notification) error
+}
+
+type NotificationUpdater interface {
+	Update(notification model.Notification) error
 }
 
 type CassandraNotificationRepository struct {
@@ -23,7 +28,7 @@ func NewNotificationRepository() *CassandraNotificationRepository {
 	return &CassandraNotificationRepository{DB: sess}
 }
 
-func (rp *CassandraNotificationRepository) CreateNotification(notification model.Notification) error {
+func (rp *CassandraNotificationRepository) Create(notification model.Notification) error {
 	return rp.DB.Query(
 		"INSERT INTO notifications(id, name, description, strategy, notify_at, user_id) VALUES(?,?,?,?,?,?)",
 		notification.ID,
@@ -32,5 +37,16 @@ func (rp *CassandraNotificationRepository) CreateNotification(notification model
 		notification.Strategy,
 		notification.NotifyAt.UnixNano(),
 		notification.UserID,
+	).Exec()
+}
+
+func (rp *CassandraNotificationRepository) Update(notification model.Notification) error {
+	return rp.DB.Query(
+		"UPDATE notifications SET name = ?, description = ?, strategy = ?, notify_at = ? WHERE id = ? IF EXISTS",
+		notification.Name,
+		notification.Description,
+		notification.Strategy,
+		notification.NotifyAt.UnixNano(),
+		notification.ID,
 	).Exec()
 }

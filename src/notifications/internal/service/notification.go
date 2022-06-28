@@ -15,7 +15,17 @@ func NewNotificationService(notificationRepo repository.NotificationRepository) 
 
 func (s NotificationService) CreateNotification(notificationDTO dto.NotificationCreationInfo) (bool, error) {
 	notification := notificationDTO.ToModel()
-	err := s.notificationRepo.CreateNotification(notification)
+	err := s.notificationRepo.Create(notification)
+	if err != nil {
+		return false, err
+	}
+
+	return true, nil
+}
+
+func (s NotificationService) UpdateNotification(notificationDTO dto.NotificationUpdateInfo) (bool, error) {
+	notification := notificationDTO.ToModel()
+	err := s.notificationRepo.Update(notification)
 	if err != nil {
 		return false, err
 	}
